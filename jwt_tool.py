@@ -9,6 +9,7 @@ from checks.alg_none import (
 
 from parser import parse_jwt
 from checks.weak_key import check_weak_key
+from checks.unverified_signature import run_unverified_signature_scan
 
 
 def show_menu():
@@ -165,8 +166,37 @@ def main():
                     print("\n[-] Rejected")
 
         elif choice == "3":
+            print("\n=== Unverified Signature Scan ===")
 
-            print("\n[*] Unverified Signature scan selected")
+            url = input("Enter target URL: ").strip()
+
+            print("\nWhere is the JWT located?")
+            print("[1] Authorization Header")
+            print("[2] Cookie")
+
+            location_choice = input("Select option: ").strip()
+
+            if location_choice == "1":
+
+                location = "header"
+                cookie_name = None
+
+            elif location_choice == "2":
+
+                location = "cookie"
+                cookie_name = input("Enter cookie name: ").strip()
+
+            else:
+
+                print("[-] Invalid option")
+                return
+
+            run_unverified_signature_scan(
+                args.token,
+                url,
+                location,
+                cookie_name
+            )
 
         else:
 
